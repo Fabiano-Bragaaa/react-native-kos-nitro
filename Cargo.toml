@@ -1,0 +1,73 @@
+[workspace]
+resolver = "2"
+members = [
+    "rust/kos-nitro",
+    "rust/vendor/kos",
+    "rust/vendor/kos-codec",
+    "rust/vendor/kos-mobile",
+]
+
+[workspace.package]
+authors = ["Klever <kos@klever.io>"]
+edition = "2021"
+homepage = "https://klever.org/"
+license = "Apache-2.0"
+repository = "https://github.com/Fabiano-Bragaaa/react-native-kos-nitro"
+rust-version = "1.85.0"
+version = "0.1.0"
+
+[workspace.dependencies]
+# Phase 2 (Option C): kos, kos-codec and kos-mobile are vendored in-tree under
+# rust/vendor/ (source snapshot of klever-io/kos-rs @ 0.3.0 with the `pub`
+# visibility changes kos-nitro needs). This removes the dependency on the
+# ghsantos/kos-rs fork entirely.
+kos = { path = "rust/vendor/kos", default-features = false, features = ["not-ksafe"] }
+kos-codec = { path = "rust/vendor/kos-codec", default-features = false }
+kos-mobile = { path = "rust/vendor/kos-mobile", default-features = false }
+
+# Shared deps required by the vendored crates (mirrors the upstream kos-rs
+# workspace so their `workspace = true` references resolve identically).
+bech32 = "0.9.1"
+sha2 = { version = "0.11.0" }
+sha3 = { version = "0.11.0" }
+hmac = { version = "0.12" }
+secp256k1 = { version = "0.27", features = ["recovery", "rand", "bitcoin_hashes"] }
+ed25519-dalek = { version = "2" }
+coins-bip32 = { version = "0.13.0", default-features = false }
+coins-bip39 = { version = "0.13.0", default-features = false, features = ["english"] }
+bytes = { version = "1.11.1", default-features = false }
+hex = { version = "0.4.3", default-features = false }
+rand = "0.10.1"
+prost = "0.11"
+prost-types = "0.11"
+lazy_static = "1.4.0"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "blocking", "json"] }
+wasm-bindgen = "0.2"
+uniffi = { version = "0.31.1" }
+enum_delegate = "0.2"
+serde = { version = "1.0", default-features = false }
+serde_json = "1.0"
+thiserror = "2.0.18"
+ecies = { version = "0.2.7", default-features = false, features = ["pure"] }
+lwk_common = "0.16.0"
+lwk_signer = "0.16.0"
+lwk_wollet = "0.16.0"
+
+[profile.mobile]
+inherits = "release"
+lto = true
+opt-level = "z"
+codegen-units = 1
+panic = "abort"
+rpath = true
+
+[profile.min-size]
+inherits = "release"
+opt-level = "s"
+strip = "symbols"
+panic = "abort"
+codegen-units = 1
+lto = false
+overflow-checks = false
+debug = 0
+incremental = false

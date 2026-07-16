@@ -1,0 +1,70 @@
+name: Rust and Nitro Checks
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/kos-nitro/**'
+      - 'packages/kos/**'
+      - 'packages/kos-mobile/**'
+      - 'packages/kos-codec/**'
+      - 'packages/react-native-kos-nitro/packages/react-native-kos-nitro/src/**'
+      - 'packages/react-native-kos-nitro/packages/react-native-kos-nitro/nitro.json'
+      - 'packages/react-native-kos-nitro/packages/react-native-kos-nitro/cpp/**'
+  pull_request:
+    paths:
+      - 'packages/kos-nitro/**'
+      - 'packages/kos/**'
+      - 'packages/kos-mobile/**'
+      - 'packages/kos-codec/**'
+      - 'packages/react-native-kos-nitro/packages/react-native-kos-nitro/src/**'
+      - 'packages/react-native-kos-nitro/packages/react-native-kos-nitro/nitro.json'
+      - 'packages/react-native-kos-nitro/packages/react-native-kos-nitro/cpp/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust-tests:
+    name: Run Rust Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Run cargo tests
+        run: cargo test -p kos-nitro
+
+  nitrogen-check:
+    name: Verify Nitrogen Generated Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          cd packages/react-native-kos-nitro/packages/react-native-kos-nitro
+          npm install
+
+      - name: Run nitrogen
+        run: |
+          cd packages/react-native-kos-nitro/packages/react-native-kos-nitro
+          npx nitrogen --logLevel="debug"
+
+      - name: Check generated files are up to date
+        run: |
+          cd packages/react-native-kos-nitro
+          git diff --exit-code packages/react-native-kos-nitro/nitrogen/generated

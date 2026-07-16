@@ -1,0 +1,19 @@
+# Prebuilt native binaries are NOT shipped in the npm tarball.
+# They are downloaded from the matching GitHub Release by scripts/fetch-binaries.js
+# (runs on postinstall). Keeps the package small.
+ios/KosNitro.xcframework
+android/src/main/jniLibs
+
+# Rust sources / build artifacts (only the C-ABI header is shipped)
+rust/**
+!rust/kos-nitro/include
+!rust/kos-nitro/include/**
+target
+build
+
+# Dev-only
+example
+scripts/**
+!scripts/fetch-binaries.js
+build_ios.sh
+build_android.sh

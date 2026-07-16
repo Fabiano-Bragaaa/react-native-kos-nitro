@@ -1,0 +1,46 @@
+[package]
+name = "kos-codec"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+build = "build.rs"
+
+[lib]
+name = "kos_codec"
+crate-type = ["lib"]
+
+[dependencies]
+kos = { workspace = true }
+ciborium = "0.2.2"
+hex = { version = "0.4.3", features = ["alloc"], default-features = false }
+xrpl-rust = { version = "1.1.0", default-features = false, features = ["core", "utils"] }
+cosmrs = { version = "0.21.1", default-features = false }
+bitcoin = { version = "0.32.5", default-features = false }
+byteorder = { version = "1.5.0" }
+pallas-primitives = "0.32.0"
+rlp = { version = "0.5.0", default-features = false }
+prost = "0.13.5"
+tiny-json-rs = "0.2.5"
+prost-types = { version = "0.13.5", default-features = false }
+parity-scale-codec = { version = "3.6.9", default-features = false, features = ["derive"] }
+serde = { version = "1.0.219", default-features = false, features = ["derive", "alloc"] }
+serde_json = { version = "1.0.140", default-features = false, features = ["alloc"] }
+alloy-dyn-abi = { version = "0.8.26", default-features = false, features = ["eip712"] }
+bs58 = { version = "0.5", default-features = false, features = ["alloc"] }
+sha3 = { version = "0.10.8", default-features = false }
+regex = { version = "1.11.1", default-features = false, features = ["perf"] }
+base64 = "0.22.1"
+sha2 = {workspace = true }
+base32 = "0.5.1"
+leb128 = "0.2.5"
+serde_cbor = "0.11.2"
+stellar-xdr = { version = "25.0.1", features = ["base64"], default-features = true }
+
+
+
+[build-dependencies]
+prost-build = "0.13.5"
