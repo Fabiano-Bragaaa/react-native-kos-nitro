@@ -21,7 +21,11 @@ const REPO = 'react-native-kos-nitro'
 
 const root = path.resolve(__dirname, '..')
 const pkg = require(path.join(root, 'package.json'))
-const tag = `v${pkg.version}`
+// The binaries live in a GitHub Release whose tag is decoupled from the npm
+// package version: JS-only releases reuse the same binaries without re-uploading
+// them. `binaries.tag` in package.json pins that release; it only changes when
+// the native code (Rust) changes. Falls back to the package version tag.
+const tag = (pkg.binaries && pkg.binaries.tag) || `v${pkg.version}`
 
 const TARGETS = {
   ios: {

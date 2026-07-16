@@ -1,6 +1,6 @@
 {
   "name": "react-native-kos-nitro",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Native bindings for the KOS wallet core (Klever) via Nitro modules: mnemonic generation, key derivation and transaction signing for many chains, backed by Rust.",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
@@ -21,6 +21,9 @@
     "react-native",
     "react-native-kos-nitro"
   ],
+  "binaries": {
+    "tag": "v0.1.0"
+  },
   "files": [
     "src",
     "react-native.config.js",
