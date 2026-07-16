@@ -102,6 +102,13 @@ async function main() {
     log('KOS_NITRO_SKIP_DOWNLOAD=1 set, skipping binary download')
     return
   }
+  // In the source checkout (not an installed dependency) Cargo.toml is present.
+  // Skip the auto-download there: contributors build with build_*.sh, and the
+  // release CI must not try to fetch a not-yet-published release.
+  if (fs.existsSync(path.join(root, 'Cargo.toml'))) {
+    log('source checkout detected (Cargo.toml present), skipping download')
+    return
+  }
   const requested = (process.env.KOS_NITRO_PLATFORMS || 'ios,android')
     .split(',')
     .map((s) => s.trim())
