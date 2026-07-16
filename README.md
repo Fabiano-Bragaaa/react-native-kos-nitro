@@ -52,25 +52,36 @@ The download is idempotent: it is skipped when the binaries are already present.
 
 ## Usage
 
+Import the functions you need directly:
+
 ```ts
-import { KosNitro } from 'react-native-kos-nitro'
+import {
+  getSupportedChains,
+  generateMnemonic,
+  generateWalletFromMnemonic,
+  signMessage,
+} from 'react-native-kos-nitro'
 
 // Which chains are supported (numeric chain ids)
-const chains = KosNitro.getSupportedChains()
+const chains = getSupportedChains()
 
 // Generate a 24-word mnemonic
-const mnemonic = KosNitro.generateMnemonic(24)
+const mnemonic = generateMnemonic(24)
 
 // Derive an account — chain 38 = KLV, index 0
-const account = KosNitro.generateWalletFromMnemonic(mnemonic, 38, 0)
+const account = generateWalletFromMnemonic(mnemonic, 38, 0)
 // account: { chain_id, private_key, public_key, address, path, options? }
 
 // Sign a message (hex payload); returns an ArrayBuffer
-const sig = KosNitro.signMessage(account, 'deadbeef', false)
+const sig = signMessage(account, 'deadbeef', false)
 const sigHex = Array.from(new Uint8Array(sig))
   .map((b) => b.toString(16).padStart(2, '0'))
   .join('')
 ```
+
+Prefer the named imports above. The whole native instance is also exported as
+`KosNitro` (e.g. `import { KosNitro } from 'react-native-kos-nitro'` then
+`KosNitro.generateMnemonic(24)`) if you'd rather have a single object.
 
 All methods are **synchronous** and run on the calling thread. For heavy calls,
 invoke them from a worklet/background thread if you need to keep the UI thread
